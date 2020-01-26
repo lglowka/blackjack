@@ -258,29 +258,13 @@ def winner(p_v, d_v, bet):
 def start_game():
     global player, dealer, deck, a
     deck = Deck()
-    '''
-    # Test
-    card0 = Card("h", "6", 6)
-    card1 = Card("s", "6", 6)
-    card2 = Card("s", "K", 10)
-    card3 = Card("s", "K", 10)
-    card4 = Card("s", "A", 11)
-    deck.cards.append(card1)
-    deck.cards.append(card0)
-    deck.cards.append(card3)
-    deck.cards.append(card2)
-    deck.cards.append(card4)
-    #
-    '''
     dealer = Dealer()
-    deck.build()
     deck.shuffle()
     name = input("Dealer: Hi! We are playing Blackjack.\nThere is 5 decks in play.\nWhat's Your name? ")
     player = Player(name)
 
 
 def deal_hand():
-    # global bet
     exep = True
     while exep:
         try:
