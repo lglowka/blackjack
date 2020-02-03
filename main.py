@@ -293,46 +293,90 @@ def deal_hand():
     check_deck(deck)
     player.draw(deck)
     player.show_hand()
-    # players hand loop
-    while player.can_split(player.hand):
-        if player.can_split(player.hand):
-            d = input("To split type [s]")
-            if d == "s":
-                player.split()
-            else:
-                player.show_hand()
-                break
-
-    player.action(player.bet)
-    dealer.action()
-    print()
-    player.winnings += winner(player.p_v, dealer.d_v, player.bet)
-    player.discard()
-    dealer.discard()
-    print()
-    while player.hand1:
-        player.winnings -= player.bet
+    # check if blackjack
+    if player.show_value(0) == 21:
+        print("Blackjack")
         dealer.draw(deck)
         dealer.show_hand()
-        player.hand.append(player.hand1.pop(0))
-        player.draw(deck)
-        player.show_hand()
+        if dealer.show_value(0) != 21:
+            player.bet *= 1.25
+        player.winnings += winner(21, dealer.show_value(0), player.bet)
+        player.discard()
+        dealer.discard()
+    else:
+        # players hand loop
         while player.can_split(player.hand):
             if player.can_split(player.hand):
                 d = input("To split type [s]")
                 if d == "s":
                     player.split()
-
                 else:
                     player.show_hand()
                     break
-        player.action(player.bet)
-        dealer.action()
-        print()
-        player.winnings += winner(player.p_v, dealer.d_v, player.bet)
-        player.discard()
-        dealer.discard()
-        print()
+        if player.show_value(0) == 21:
+            print("Blackjack")
+            dealer.draw(deck)
+            dealer.show_hand()
+            if dealer.show_value(0) != 21:
+                player.bet *= 1.25
+            player.winnings += winner(21, dealer.show_value(0), player.bet)
+            player.bet /= 1.25
+            player.discard()
+            dealer.discard()
+        else:
+            player.action(player.bet)
+            dealer.action()
+            print()
+            player.winnings += winner(player.p_v, dealer.d_v, player.bet)
+            player.discard()
+            dealer.discard()
+            print()
+        while player.hand1:
+            player.winnings -= player.bet
+            dealer.draw(deck)
+            dealer.show_hand()
+            player.hand.append(player.hand1.pop(0))
+            player.draw(deck)
+            player.show_hand()
+            if player.show_value(0) == 21:
+                print("Blackjack")
+                dealer.draw(deck)
+                dealer.show_hand()
+                if dealer.show_value(0) != 21:
+                    player.bet *= 1.25
+                player.winnings += winner(21, dealer.show_value(0), player.bet)
+                player.bet /= 1.25
+                player.discard()
+                dealer.discard()
+
+            else:
+                while player.can_split(player.hand):
+                    if player.can_split(player.hand):
+                        d = input("To split type [s]")
+                        if d == "s":
+                            player.split()
+
+                        else:
+                            player.show_hand()
+                            break
+                if player.show_value(0) == 21:
+                    print("Blackjack")
+                    dealer.draw(deck)
+                    dealer.show_hand()
+                    if dealer.show_value(0) != 21:
+                        player.bet *= 1.25
+                    player.winnings += winner(21, dealer.show_value(0), player.bet)
+                    player.bet /= 1.25
+                    player.discard()
+                    dealer.discard()
+                else:
+                    player.action(player.bet)
+                    dealer.action()
+                    print()
+                    player.winnings += winner(player.p_v, dealer.d_v, player.bet)
+                    player.discard()
+                    dealer.discard()
+                    print()
 
 
 def res():
