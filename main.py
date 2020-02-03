@@ -132,6 +132,7 @@ class Player(object):
 
     def __init__(self, name):
         self.hand = []
+        self.hand1 = []
         self.name = name
         self.winnings = 0
         self.p_v = 0
@@ -216,6 +217,17 @@ class Player(object):
             print("Player stay on", player.show_value(p_hand_value))
         self.p_v = player.show_value(p_hand_value)
 
+    def can_split(self, hand):
+        if hand[0].value == hand[1].value:
+            return True
+        else:
+            return False
+
+    def split(self):
+        player.hand1.append(player.hand.pop())
+        player.draw(deck)
+        player.show_hand()
+
 
 def contains(list, filter):
     for x in list:
@@ -282,6 +294,15 @@ def deal_hand():
     player.draw(deck)
     player.show_hand()
     # players hand loop
+    while player.can_split(player.hand):
+        if player.can_split(player.hand):
+            d = input("To split type [s]")
+            if d == "s":
+                player.split()
+            else:
+                player.show_hand()
+                break
+
     player.action(player.bet)
     dealer.action()
     print()
@@ -289,6 +310,29 @@ def deal_hand():
     player.discard()
     dealer.discard()
     print()
+    while player.hand1:
+        player.winnings -= player.bet
+        dealer.draw(deck)
+        dealer.show_hand()
+        player.hand.append(player.hand1.pop(0))
+        player.draw(deck)
+        player.show_hand()
+        while player.can_split(player.hand):
+            if player.can_split(player.hand):
+                d = input("To split type [s]")
+                if d == "s":
+                    player.split()
+
+                else:
+                    player.show_hand()
+                    break
+        player.action(player.bet)
+        dealer.action()
+        print()
+        player.winnings += winner(player.p_v, dealer.d_v, player.bet)
+        player.discard()
+        dealer.discard()
+        print()
 
 
 def res():
@@ -312,4 +356,3 @@ def main_loop():
 
 
 main_loop()
-
